@@ -1,4 +1,4 @@
-package com.example.khachhangthanthiet;
+package com.example.mytestapplication;
 
 import android.os.Bundle;
 import android.view.View;
