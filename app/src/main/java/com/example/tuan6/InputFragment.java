@@ -1,4 +1,5 @@
-package com.example.mytestapplication;
+package com.example.tuan6;
+
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,11 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class UseFragment extends Fragment {
+public class InputFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_use, container, false);
+        return inflater.inflate(R.layout.fragment_input, container, false);
     }
 }

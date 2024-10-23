@@ -1,4 +1,4 @@
-package com.example.mytestapplication;
+package com.example.tuan6;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
