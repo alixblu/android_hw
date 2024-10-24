@@ -51,17 +51,33 @@ public class CustomAdapter extends BaseAdapter {
         TextView score = convertView.findViewById(R.id.score);
         TextView timeEdit = convertView.findViewById(R.id.timeedit);
         ImageView deleteIcon = convertView.findViewById(R.id.delete_icon);
+        TextView note = convertView.findViewById(R.id.note);
 
         phoneNumber.setText(currentPoint.getSdt());
-        timeCreate.setText(currentPoint.getCur_date()); // assuming cur_date is creation date
+        timeCreate.setText(currentPoint.getTime_create()); // assuming cur_date is creation date
         score.setText(currentPoint.getPoint());
         timeEdit.setText(currentPoint.getCur_date()); // You might want to store and use edit date here
-
+        note.setText(currentPoint.getNote());
         // Handle delete icon click (optional)
         deleteIcon.setOnClickListener(view -> {
             // Code to handle delete action
         });
+        deleteIcon.setOnClickListener(view -> {
+            // Get the phone number to delete
+            String phoneNumberToDelete = currentPoint.getSdt();
+
+            // Delete from database
+            DataBase db = new DataBase(context);
+            db.deletePointByPhoneNumber(phoneNumberToDelete);
+
+            // Remove the item from the list
+            pointsList.remove(position);
+
+            // Notify adapter about the change
+            notifyDataSetChanged();
+        });
 
         return convertView;
     }
+
 }

@@ -114,6 +114,11 @@ public class DataBase extends SQLiteOpenHelper {
         }
         return point;
     }
+    public void deletePointByPhoneNumber(String phoneNumber) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(table_input, key_phonenumber + "=?", new String[]{phoneNumber});
+        db.close();
+    }
 
 
 }

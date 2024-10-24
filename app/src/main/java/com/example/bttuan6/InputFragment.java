@@ -26,6 +26,7 @@ public class InputFragment extends Fragment {
     private EditText cur_point;
     private EditText new_point;
     private EditText note;
+    private Date createDate;
     private DataBase db;
 
     @SuppressLint("MissingInflatedId")
@@ -40,6 +41,7 @@ public class InputFragment extends Fragment {
         cur_point = view.findViewById(R.id.CurrentPoint);
         new_point = view.findViewById(R.id.NewPoint);
         note = view.findViewById(R.id.Note);
+
         db = new DataBase(getActivity()); // Correct context initialization
 
         phonenumber.addTextChangedListener(new TextWatcher() {
@@ -68,16 +70,17 @@ public class InputFragment extends Fragment {
                 int curPoint = Integer.parseInt(cur_point.getText().toString());
                 int newPoint = Integer.parseInt(new_point.getText().toString());
                 String point_save = String.valueOf(curPoint + newPoint);
-                String date = new SimpleDateFormat("yyyy-MM-dd-HH-mm", Locale.getDefault()).format(new Date());
+                String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
                 String phone = phonenumber.getText().toString();
+
                 if (db.isPhoneNumberExists(phone)) {
                     // Update existing record
-                    Points updatedPoint = new Points(phone, point_save, note.getText().toString(), date);
+                    Points updatedPoint = new Points(phone, point_save, note.getText().toString(), date, "");
                     db.updatePoint(updatedPoint);
                     showToast("Cập nhật thành công");
                 } else {
                     // Add new record
-                    Points addPoint = new Points(phone, point_save, note.getText().toString(), date , date);
+                    Points addPoint = new Points(phone, point_save, note.getText().toString(), date, date); // Using 'date' for both creation and update
                     db.addPoint(addPoint);
                     showToast("Thêm thành công");
                 }
@@ -87,6 +90,7 @@ public class InputFragment extends Fragment {
                 showToastAtTop("Vui lòng nhập điểm hợp lệ.");
             }
         });
+
 
         saveNextInput.setOnClickListener(v -> {
             // Handle save and next button click
