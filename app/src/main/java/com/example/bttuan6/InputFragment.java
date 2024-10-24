@@ -53,6 +53,7 @@ public class InputFragment extends Fragment {
                     fillCurrentPointsAndNotes(phone);
                 } else {
                     cur_point.setText("0");
+                    note.setText("");
                 }
             }
 
