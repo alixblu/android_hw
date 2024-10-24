@@ -101,19 +101,18 @@ public class DataBase extends SQLiteOpenHelper {
                 key_phonenumber + "=?",
                 new String[]{phoneNumber},
                 null, null, null);
-
         Points point = null;
         if (cursor != null && cursor.moveToFirst()) {
             String currentPoint = cursor.getString(cursor.getColumnIndexOrThrow(key_point));
             String note = cursor.getString(cursor.getColumnIndexOrThrow(key_note));
-            point = new Points(phoneNumber, currentPoint, note, ""); // "cur_date" không cần thiết ở đây
+            point = new Points(phoneNumber, currentPoint, note, ""); // "cur_date" not needed here
         }
-
         if (cursor != null) {
             cursor.close();
         }
         return point;
     }
+
     public void deletePointByPhoneNumber(String phoneNumber) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(table_input, key_phonenumber + "=?", new String[]{phoneNumber});

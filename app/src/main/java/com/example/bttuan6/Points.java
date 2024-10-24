@@ -22,6 +22,7 @@ public class Points {
         this.cur_date = cur_date;
     }
 
+    public Points(){};
     public String getSdt() {
         return sdt;
     }
