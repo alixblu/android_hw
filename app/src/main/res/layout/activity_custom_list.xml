@@ -5,85 +5,85 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-    <!-- Left Side -->
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="3"
-        android:orientation="horizontal"
-        tools:ignore="Suspicious0dp">
 
+        <!-- Left Side -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <!-- Large number -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <!-- Large number -->
+                <TextView
+                    android:id="@+id/phonenumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5678901234"
+                    android:textColor="#004900"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <!-- Timestamp -->
+                <TextView
+                    android:id="@+id/timecreate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2024-07-31 08:14:59"
+                    android:textColor="#808080"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
             <TextView
-                android:id="@+id/phonenumber"
+                android:id="@+id/score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5678901234"
-                android:textColor="#004900"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <!-- Timestamp -->
-            <TextView
-                android:id="@+id/timecreate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2024-07-31 08:14:59"
-                android:textColor="#808080"
-                android:textSize="12sp" />
+                android:layout_gravity="bottom"
+                android:text="4"
+                android:textColor="#000000"
+                android:textSize="30sp" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/score"
-            android:layout_width="wrap_content"
+        <!-- Right Side: Secondary timestamp, delete icon, and top-right detail icon -->
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:text="4"
-            android:textColor="#000000"
-            android:textSize="30sp" />
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="end">
+
+            <!-- Secondary timestamp -->
+            <TextView
+                android:id="@+id/timeedit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2024-07-31 08:15"
+                android:textColor="#808080"
+                android:textSize="12sp"
+                android:gravity="end" />
+
+            <!-- Delete icon -->
+            <ImageView
+                android:id="@+id/delete_icon"
+                android:layout_width="25dp"
+                android:layout_height="31dp"
+                android:layout_gravity="end"
+                android:src="@drawable/trash_erase"
+                android:contentDescription="Xóa bản ghi" /> <!-- Thêm contentDescription -->
+        </LinearLayout>
     </LinearLayout>
 
-    <!-- Right Side: Secondary timestamp, delete icon, and top-right detail icon -->
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:gravity="end"
-        tools:ignore="Suspicious0dp">
-
-        <!-- Secondary timestamp -->
-        <TextView
-            android:id="@+id/timeedit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2024-07-31 08:15"
-            android:textColor="#808080"
-            android:textSize="12sp"
-            android:gravity="end" />
-
-        <!-- Delete icon -->
-        <ImageView
-            android:id="@+id/delete_icon"
-            android:layout_width="25dp"
-            android:layout_height="31dp"
-            android:layout_gravity="end"
-            android:src="@drawable/trash_erase" />
-    </LinearLayout>
-    </LinearLayout>
     <TextView
         android:id="@+id/note"
         android:layout_width="match_parent"
@@ -91,5 +91,4 @@
         android:text="this is note"
         android:textColor="#808080"
         android:textSize="12sp" />
-
 </LinearLayout>

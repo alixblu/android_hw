@@ -19,6 +19,7 @@ public class login extends AppCompatActivity {
         EditText inputUsername = findViewById(R.id.inputUsername);
         EditText inputPassword = findViewById(R.id.inputPass);
         Button loginButton = findViewById(R.id.button);
+        Button changePasswordButton = findViewById(R.id.btnChangePassword);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,8 +39,12 @@ public class login extends AppCompatActivity {
             }
         });
 
-        // Check and request storage permission
-    }
-
-
-}
+        // Chuyển đến ChangePasswordActivity khi nhấn nút đổi mật khẩu
+        changePasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(login.this, ChangePasswordActivity.class);
+                startActivity(intent);
+            }
+        });
+    }}

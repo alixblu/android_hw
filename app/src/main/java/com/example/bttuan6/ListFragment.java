@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
+import java.io.InputStream; // Để sử dụng InputStream
+import org.xmlpull.v1.XmlPullParser; // Để sử dụng XmlPullParser
+import org.xmlpull.v1.XmlPullParserFactory; // Để sử dụng XmlPullParserFactory
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,13 +49,14 @@ public class ListFragment extends Fragment {
                     exportDataToXml();
                     sendEmailWithXml();
                 } else if (item.getTitle().equals("Import")) {
-                    // Open file explorer to select XML file
+                    // Mở file explorer để chọn file XML
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.setType("text/xml");
                     startActivityForResult(intent, PICK_XML_FILE_REQUEST);
                 }
                 return true;
             });
+
 
             popupMenu.show();
         });
@@ -146,6 +150,73 @@ public class ListFragment extends Fragment {
         emailIntent.putExtra(Intent.EXTRA_STREAM, uri);  // Đính kèm file XML
 
         startActivity(Intent.createChooser(emailIntent, "Chọn ứng dụng email:"));
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_XML_FILE_REQUEST && resultCode == getActivity().RESULT_OK) {
+            Uri uri = data.getData();
+            if (uri != null) {
+                importDataFromXml(uri);
+            }
+        }
+    }
+
+    private void importDataFromXml(Uri uri) {
+        try {
+            InputStream inputStream = getContext().getContentResolver().openInputStream(uri);
+            if (inputStream != null) {
+                XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+                factory.setNamespaceAware(true);
+                XmlPullParser parser = factory.newPullParser();
+                parser.setInput(inputStream, null);
+
+                Points point = null;
+                ArrayList<Points> importedPointsList = new ArrayList<>();
+                int eventType = parser.getEventType();
+
+                while (eventType != XmlPullParser.END_DOCUMENT) {
+                    String name = parser.getName();
+                    switch (eventType) {
+                        case XmlPullParser.START_TAG:
+                            if (name.equals("entry")) {
+                                point = new Points(); // Khởi tạo đối tượng Points mới
+                            } else if (point != null) {
+                                if (name.equals("sdt")) {
+                                    point.setSdt(parser.nextText());
+                                } else if (name.equals("point")) {
+                                    point.setPoint(parser.nextText());
+                                } else if (name.equals("note")) {
+                                    point.setNote(parser.nextText());
+                                } else if (name.equals("cur_date")) {
+                                    point.setCur_date(parser.nextText());
+                                } else if (name.equals("time")) {
+                                    point.setTime_create(parser.nextText());
+                                }
+                            }
+                            break;
+
+                        case XmlPullParser.END_TAG:
+                            if (name.equals("entry") && point != null) {
+                                importedPointsList.add(point); // Thêm điểm vào danh sách
+                                db.addPoint(point); // Thêm điểm vào cơ sở dữ liệu
+                            }
+                            break;
+                    }
+                    eventType = parser.next();
+                }
+
+                Toast.makeText(getContext(), "Nhập dữ liệu thành công!", Toast.LENGTH_SHORT).show();
+                // Cập nhật lại danh sách sau khi nhập
+                pointsArrayList.clear(); // Xóa danh sách hiện tại
+                pointsArrayList.addAll(loadDataFromDatabase()); // Tải lại dữ liệu từ cơ sở dữ liệu
+                customAdapter.notifyDataSetChanged(); // Cập nhật adapter
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Lỗi khi nhập dữ liệu: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
