@@ -67,9 +67,9 @@ public class ListFragment extends Fragment {
                 String point = cursor.getString(cursor.getColumnIndexOrThrow("point"));
                 String note = cursor.getString(cursor.getColumnIndexOrThrow("note"));
                 String curDate = cursor.getString(cursor.getColumnIndexOrThrow("cur_date"));
-
+                String createDate = cursor.getString(cursor.getColumnIndexOrThrow("time"));
                 // Add the point object to the list
-                pointsList.add(new Points(phoneNumber, point, note, curDate));
+                pointsList.add(new Points(phoneNumber, point, note, curDate, createDate));
             } while (cursor.moveToNext());
         }
         cursor.close();

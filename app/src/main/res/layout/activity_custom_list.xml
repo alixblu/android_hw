@@ -5,9 +5,13 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
     <!-- Left Side -->
     <LinearLayout
         android:layout_width="0dp"
@@ -68,7 +72,8 @@
             android:layout_height="wrap_content"
             android:text="2024-07-31 08:15"
             android:textColor="#808080"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:gravity="end" />
 
         <!-- Delete icon -->
         <ImageView
@@ -78,5 +83,13 @@
             android:layout_gravity="end"
             android:src="@drawable/trash_erase" />
     </LinearLayout>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="this is note"
+        android:textColor="#808080"
+        android:textSize="12sp" />
 
 </LinearLayout>

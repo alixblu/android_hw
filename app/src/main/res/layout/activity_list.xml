@@ -8,9 +8,9 @@
     tools:context=".ListFragment">
 
     <ListView
+        android:id="@+id/customListview"
         android:layout_width="409dp"
         android:layout_height="683dp"
-        android:id="@+id/customListview"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -27,8 +27,9 @@
         android:id="@+id/textView"
         android:layout_width="223dp"
         android:layout_height="50dp"
+        android:gravity="center"
         android:text="Lịch sử hoạt động"
-        app:layout_constraintEnd_toStartOf="@+id/imageView"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteY="-2dp" />
