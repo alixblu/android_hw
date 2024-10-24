@@ -6,9 +6,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class login extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,12 +31,15 @@ public class login extends AppCompatActivity {
                     Intent intent = new Intent(login.this, MainActivity.class);
                     startActivity(intent);
                     finish();
-
                 } else {
                     // Show error message if credentials are incorrect
                     Toast.makeText(login.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        // Check and request storage permission
     }
+
+
 }
