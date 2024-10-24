@@ -5,6 +5,15 @@ public class Points {
     private String point;
     private String note;
     private String cur_date;
+    private String time_create;
+
+    public Points(String sdt, String point, String note, String cur_date, String time_create) {
+        this.sdt = sdt;
+        this.point = point;
+        this.note = note;
+        this.cur_date = cur_date;
+        this.time_create = time_create;
+    }
 
     public Points(String sdt, String point, String note, String cur_date) {
         this.sdt = sdt;
@@ -43,5 +52,13 @@ public class Points {
 
     public void setCur_date(String cur_date) {
         this.cur_date = cur_date;
+    }
+
+    public String getTime_create() {
+        return time_create;
+    }
+
+    public void setTime_create(String time_create) {
+        this.time_create = time_create;
     }
 }

@@ -17,6 +17,7 @@ public class DataBase extends SQLiteOpenHelper {
     private static final String key_point = "point";
     private static final String key_note = "note";
     private static final String key_cur_date = "cur_date";
+    private static final String key_time_create = "time";
 
     private Points Points;
 
@@ -33,7 +34,8 @@ public class DataBase extends SQLiteOpenHelper {
                 key_phonenumber + " TEXT PRIMARY KEY, " +
                 key_point + " TEXT, " +
                 key_note + " TEXT, " +
-                key_cur_date + " TEXT)";
+                key_cur_date + " TEXT,"+
+                key_time_create + " TEXT)";
         sqLiteDatabase.execSQL(createTable);
     }
 
@@ -52,6 +54,7 @@ public class DataBase extends SQLiteOpenHelper {
         values.put(key_point, points.getPoint());
         values.put(key_note, points.getNote());
         values.put(key_cur_date, points.getCur_date());
+        values.put(key_time_create, points.getTime_create());
 
         long result = db.insert(table_input, null, values);
         Log.d("DB_INSERT", "Insert result: " + result); // Kiểm tra kết quả insert

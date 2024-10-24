@@ -67,7 +67,7 @@ public class InputFragment extends Fragment {
                 int curPoint = Integer.parseInt(cur_point.getText().toString());
                 int newPoint = Integer.parseInt(new_point.getText().toString());
                 String point_save = String.valueOf(curPoint + newPoint);
-                String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+                String date = new SimpleDateFormat("yyyy-MM-dd-HH-mm", Locale.getDefault()).format(new Date());
                 String phone = phonenumber.getText().toString();
                 if (db.isPhoneNumberExists(phone)) {
                     // Update existing record
@@ -76,7 +76,7 @@ public class InputFragment extends Fragment {
                     showToast("Cập nhật thành công");
                 } else {
                     // Add new record
-                    Points addPoint = new Points(phone, point_save, note.getText().toString(), date);
+                    Points addPoint = new Points(phone, point_save, note.getText().toString(), date , date);
                     db.addPoint(addPoint);
                     showToast("Thêm thành công");
                 }
