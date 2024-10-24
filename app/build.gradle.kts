@@ -3,10 +3,11 @@ plugins {
 }
 
 android {
+    namespace = "com.example.bttuan6"
     compileSdk = 34
-    namespace = "com.example.tuan6"  // Namespace của module cụ thể
+
     defaultConfig {
-        applicationId = "com.example.tuan6"
+        applicationId = "com.example.bttuan6"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
@@ -31,6 +32,7 @@ android {
 }
 
 dependencies {
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
