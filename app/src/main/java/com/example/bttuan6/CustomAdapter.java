@@ -7,7 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import java.util.ArrayList;
 
 public class CustomAdapter extends BaseAdapter {
@@ -54,30 +55,43 @@ public class CustomAdapter extends BaseAdapter {
         TextView note = convertView.findViewById(R.id.note);
 
         phoneNumber.setText(currentPoint.getSdt());
-        timeCreate.setText(currentPoint.getTime_create()); // assuming cur_date is creation date
+        timeCreate.setText(currentPoint.getTime_create());
         score.setText(currentPoint.getPoint());
-        timeEdit.setText(currentPoint.getCur_date()); // You might want to store and use edit date here
+        timeEdit.setText(currentPoint.getCur_date());
         note.setText(currentPoint.getNote());
-        // Handle delete icon click (optional)
+
+        // Handle delete icon click
         deleteIcon.setOnClickListener(view -> {
-            // Code to handle delete action
-        });
-        deleteIcon.setOnClickListener(view -> {
-            // Get the phone number to delete
-            String phoneNumberToDelete = currentPoint.getSdt();
+            // Create an AlertDialog to confirm deletion
+            new AlertDialog.Builder(context)
+                    .setTitle("Xác nhận xóa")
+                    .setMessage("Bạn có chắc chắn muốn xóa mục này không?")
+                    .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Get the phone number to delete
+                            String phoneNumberToDelete = currentPoint.getSdt();
 
-            // Delete from database
-            DataBase db = new DataBase(context);
-            db.deletePointByPhoneNumber(phoneNumberToDelete);
+                            // Delete from database
+                            DataBase db = new DataBase(context);
+                            db.deletePointByPhoneNumber(phoneNumberToDelete);
 
-            // Remove the item from the list
-            pointsList.remove(position);
+                            // Remove the item from the list
+                            pointsList.remove(position);
 
-            // Notify adapter about the change
-            notifyDataSetChanged();
+                            // Notify adapter about the change
+                            notifyDataSetChanged();
+                        }
+                    })
+                    .setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss(); // Close dialog on "No"
+                        }
+                    })
+                    .show();
         });
 
         return convertView;
     }
-
 }

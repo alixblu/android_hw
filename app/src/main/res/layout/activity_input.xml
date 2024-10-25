@@ -1,133 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InputFragment">
+    android:orientation="vertical"
+    android:padding="16dp">
 
+    <!-- Tiêu đề -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingBottom="24dp"
+        android:text="INPUT POINT"
+        android:textSize="24sp" />
+
+    <!-- Số điện thoại khách hàng -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Customer's Phone"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/CustomerPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#BBBBBB"
+        android:hint="Enter customer's phone number"
+        android:inputType="phone" />
+
+    <!-- Điểm hiện tại -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Current Points"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/CurrentPoint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#BBBBBB"
+        android:enabled="false"
+        android:hint="Current points will appear here"
+        android:inputType="number"
+        android:text="0" />
+
+    <!-- Điểm mới nhập -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Input New Points"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/NewPoint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#BBBBBB"
+        android:hint="Enter new points to add"
+        android:inputType="number" />
+
+    <!-- Ghi chú -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Note"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp" />
+
+    <EditText
+        android:id="@+id/Note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#BBBBBB"
+        android:gravity="top"
+        android:hint="Enter any notes here"
+        android:inputType="textMultiLine"
+         />
+
+    <!-- Nút lưu -->
     <LinearLayout
-        android:layout_width="424dp"
-        android:layout_height="515dp"
-        android:background="#2A2A2A"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp">
 
-        <!-- Title -->
-        <TextView
-            android:id="@+id/tvTitle"
+        <Button
+            android:id="@+id/btnSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:paddingBottom="24dp"
-            android:text="INPUT POINT"
-            android:textColor="#FFFFFF"
-            android:textSize="24sp" />
+            android:padding="8dp"
+            android:text="Save"
+            android:layout_marginEnd="8dp"
+             />
 
-        <!-- Customer's phone -->
-        <TextView
+        <Button
+            android:id="@+id/btnSaveNext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Customer's phone"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp" />
-
-        <!-- Current point -->
-        <EditText
-            android:id="@+id/CustomerPhone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#BBBBBB"
-            android:hint="Enter phone number"
-            android:inputType="phone"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#BBBBBB" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="16dp"
-            android:text="Current point"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/CurrentPoint"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#BBBBBB"
-            android:enabled="false"
-            android:inputType="number"
-            android:text="0"
-            android:textColor="#FFFFFF" />
-
-        <!-- Input new point -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="16dp"
-            android:text="Input new point"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/NewPoint"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#BBBBBB"
-            android:inputType="number"
-            android:textColor="#FFFFFF" />
-
-        <!-- Note -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="16dp"
-            android:text="Note"
-            android:textColor="#FFFFFF"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/Note"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#BBBBBB"
-            android:gravity="top"
-            android:inputType="textMultiLine"
-            android:lines="3"
-            android:minLines="3"
-            android:textColor="#FFFFFF" />
-
-        <!-- Buttons -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingTop="16dp">
-
-            <Button
-                android:id="@+id/btnSave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:backgroundTint="#B38BFC"
-                android:padding="8dp"
-                android:text="SAVE"
-                android:textColor="#FFFFFF" />
-
-            <Button
-                android:id="@+id/btnSaveNext"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#B38BFC"
-                android:padding="8dp"
-                android:text="SAVE and NEXT"
-                android:textColor="#FFFFFF" />
-        </LinearLayout>
-
-        <!-- Bottom Navigation -->
+            android:padding="8dp"
+            android:text="Save &amp; Next" />
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -65,31 +65,41 @@ public class InputFragment extends Fragment {
 
         // Set onClickListeners for buttons
         saveInput.setOnClickListener(v -> {
-            Check(phonenumber.getText().toString(), new_point.getText().toString());
+            String phone = phonenumber.getText().toString();
+            String newPoint = new_point.getText().toString();
+
+            // Kiểm tra đầu vào
+            if (!Check(phone, newPoint)) {  // Bây giờ Check trả về boolean
+                return; // Dừng lại nếu kiểm tra không thành công
+            }
+
             try {
                 int curPoint = Integer.parseInt(cur_point.getText().toString());
-                int newPoint = Integer.parseInt(new_point.getText().toString());
-                String point_save = String.valueOf(curPoint + newPoint);
+                int newPointValue = Integer.parseInt(newPoint); // Chuyển đổi điểm mới
+
+                String point_save = String.valueOf(curPoint + newPointValue);
                 String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
-                String phone = phonenumber.getText().toString();
 
                 if (db.isPhoneNumberExists(phone)) {
-                    // Update existing record
+                    // Cập nhật bản ghi
                     Points updatedPoint = new Points(phone, point_save, note.getText().toString(), date, "");
                     db.updatePoint(updatedPoint);
                     showToast("Cập nhật thành công");
                 } else {
-                    // Add new record
-                    Points addPoint = new Points(phone, point_save, note.getText().toString(), date, date); // Using 'date' for both creation and update
+                    // Thêm bản ghi mới
+                    Points addPoint = new Points(phone, point_save, note.getText().toString(), date, date);
                     db.addPoint(addPoint);
                     showToast("Thêm thành công");
                 }
+
                 clearInputs();
                 showDataFromDb();
             } catch (NumberFormatException e) {
                 showToastAtTop("Vui lòng nhập điểm hợp lệ.");
             }
         });
+
+
 
 
         saveNextInput.setOnClickListener(v -> {
@@ -133,16 +143,18 @@ public class InputFragment extends Fragment {
         return view; // Return the inflated view
     }
 
-    private void Check(String phone, String new_point) {
+    private boolean Check(String phone, String new_point) {
         if (phone.length() != 10) {
             showToastAtTop("Số điện thoại phải đủ 10 số");
-            return;
+            return false; // Trả về false nếu kiểm tra không thành công
         }
         if (new_point.isEmpty()) {
             showToastAtTop("Hãy nhập số điểm cần thêm");
-            return;
+            return false; // Trả về false nếu kiểm tra không thành công
         }
+        return true; // Trả về true nếu tất cả kiểm tra thành công
     }
+
 
     private void showToast(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();

@@ -8,6 +8,15 @@
 
     <!-- Các thành phần nhập liệu -->
     <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingBottom="24dp"
+        android:text="USE POINT"
+        android:textSize="24sp" />
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Customer's Phone"
