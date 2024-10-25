@@ -1,9 +1,12 @@
 package com.example.bttuan6;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +20,13 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
+
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
@@ -26,7 +34,11 @@ public class ListFragment extends Fragment {
     private ListView customListView;
     private CustomAdapter customAdapter;
     private DataBase db;
+    private StringBuilder xmlBuilder = new StringBuilder();
+
     private ArrayList<Points> pointsArrayList;
+    private boolean isExporting = false; // Declare isExporting
+
     private static final int PICK_XML_FILE_REQUEST = 1; // Request code for file picker
     @Nullable
     @Override
@@ -45,10 +57,12 @@ public class ListFragment extends Fragment {
                 if (item.getTitle().equals("Export")) {
                     exportDataToXml();
                     sendEmailWithXml();
+                    isExporting = true;
                 } else if (item.getTitle().equals("Import")) {
                     // Open file explorer to select XML file
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.setType("text/xml");
+                    isExporting = false;
                     startActivityForResult(intent, PICK_XML_FILE_REQUEST);
                 }
                 return true;
@@ -147,5 +161,115 @@ public class ListFragment extends Fragment {
 
         startActivity(Intent.createChooser(emailIntent, "Chọn ứng dụng email:"));
     }
+
+    private void importDataFromXml(Uri uri) {
+        try {
+            InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
+            if (inputStream != null) {
+                importDataFromXML(inputStream);
+                inputStream.close(); // Ensure to close the stream
+            }
+        } catch (Exception e) {
+            Log.e("File Import", "Error: " + e.getMessage());
+        }
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_XML_FILE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            if (uri != null) {
+                if (isExporting) {
+                    // We are in export mode
+                    saveXmlToFile(uri); // Export to the selected file
+                } else {
+                    // We are in import mode
+                    importDataFromXml(uri); // Import XML data
+                }
+            }
+        }
+    }
+    private void saveXmlToFile(Uri uri) {
+        try {
+            OutputStream outputStream = getActivity().getContentResolver().openOutputStream(uri);
+            if (outputStream != null) {
+                outputStream.write(xmlBuilder.toString().getBytes());  // Ensure the content is written
+                outputStream.flush(); // Force writing the data
+                outputStream.close();
+                Toast.makeText(getContext(), "Data exported successfully!", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.e("Export Error", "Error exporting data: " + e.getMessage());
+            Toast.makeText(getContext(), "Error exporting data", Toast.LENGTH_SHORT).show();
+        }
+    }
+    private void importDataFromXML(InputStream inputStream) {
+        try {
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = factory.newPullParser();
+            parser.setInput(inputStream, null);
+
+            int eventType = parser.getEventType();
+            Points point = null;
+
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                String tagName;
+
+                switch (eventType) {
+                    case XmlPullParser.START_TAG:
+                        tagName = parser.getName();
+                        if (tagName.equals("entry")) {
+                            point = new Points();
+                        } else if (point != null) {
+                            switch (tagName) {
+                                case "sdt":
+                                    point.setSdt(parser.nextText());
+                                    break;
+                                case "point":
+                                    point.setPoint(parser.nextText());
+                                    break;
+                                case "note":
+                                    point.setNote(parser.nextText());
+                                    break;
+                                case "cur_date":
+                                    point.setCur_date(parser.nextText());
+                                    break;
+                                case "time":
+                                    point.setTime_create(parser.nextText());
+                                    break;
+                            }
+                        }
+                        break;
+
+                    case XmlPullParser.END_TAG:
+                        if (parser.getName().equals("entry") && point != null) {
+                            db.addPoint(point);
+                        }
+                        break;
+                }
+                eventType = parser.next();
+
+            }
+            pointsArrayList.clear();
+            pointsArrayList.addAll(loadDataFromDatabase());
+            customAdapter.notifyDataSetChanged();
+
+        } catch (Exception e) {
+            Log.e("XML Parsing", "Error: " + e.getMessage());
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission was granted, proceed with exporting
+                exportDataToXml();
+            } else {
+                // Permission denied, show a message
+                Toast.makeText(getContext(), "Storage permission is required to export data", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
 }

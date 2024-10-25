@@ -93,8 +93,41 @@ public class InputFragment extends Fragment {
 
 
         saveNextInput.setOnClickListener(v -> {
-            // Handle save and next button click
-            showToast("Save and Next clicked");
+            // First, perform the same save operation as in saveInput
+            Check(phonenumber.getText().toString(), new_point.getText().toString());
+            try {
+                int curPoint = Integer.parseInt(cur_point.getText().toString());
+                int newPoint = Integer.parseInt(new_point.getText().toString());
+                String point_save = String.valueOf(curPoint + newPoint);
+                String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+                String phone = phonenumber.getText().toString();
+                if (db.isPhoneNumberExists(phone)) {
+                    // Update existing record
+                    Points updatedPoint = new Points(phone, point_save, note.getText().toString(), date, "");
+                    db.updatePoint(updatedPoint);
+                    showToast("Cập nhật thành công");
+                } else {
+                    // Add new record
+                    Points addPoint = new Points(phone, point_save, note.getText().toString(), date, date);
+                    db.addPoint(addPoint);
+                    showToast("Thêm thành công");
+                }
+                clearInputs();
+                showDataFromDb();
+
+                // Now switch to the UseFragment after saving
+                if (getActivity() != null) {
+                    Fragment useFragment = new UseFragment(); // Replace with your actual fragment
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.fragment_container, useFragment) // Ensure this ID matches your main layout
+                            .addToBackStack(null) // Optional: to allow going back
+                            .commit();
+                }
+
+            } catch (NumberFormatException e) {
+
+            }
         });
 
         return view; // Return the inflated view
