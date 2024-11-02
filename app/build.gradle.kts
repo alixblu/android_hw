@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.bttuan6"
+    namespace = "com.example.bttuan7"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.bttuan6"
+        applicationId = "com.example.bttuan7"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
