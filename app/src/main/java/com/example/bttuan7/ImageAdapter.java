@@ -4,49 +4,41 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
-
+import android.widget.TextView;
+import android.widget.ArrayAdapter;
 
 import java.util.List;
 
-public class ImageAdapter extends BaseAdapter {
-    private Context context;
-    private List<PhotoItem> photoItems; // Sử dụng PhotoItem
+public class ImageAdapter extends ArrayAdapter<PhotoItem> {
+    private final List<PhotoItem> photoItems;
+    private final LayoutInflater inflater;
 
     public ImageAdapter(Context context, List<PhotoItem> photoItems) {
-        this.context = context;
+        super(context, R.layout.activity_main, photoItems);
         this.photoItems = photoItems;
+        this.inflater = LayoutInflater.from(context);
     }
 
-    @Override
-    public int getCount() {
-        return photoItems.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return photoItems.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
-
         if (convertView == null) {
-            imageView = new ImageView(context);
-            imageView.setLayoutParams(new ViewGroup.LayoutParams(200, 200)); // Kích thước hình ảnh
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        } else {
-            imageView = (ImageView) convertView;
+            convertView = inflater.inflate(R.layout.activity_list_view, parent, false); // Use list_item.xml
         }
 
+        CheckBox checkBox = convertView.findViewById(R.id.checkBox);
+        ImageView imageView = convertView.findViewById(R.id.imageView);
+        TextView textView = convertView.findViewById(R.id.textView);
 
-        return imageView;
+        PhotoItem item = photoItems.get(position);
+        imageView.setImageBitmap(item.getBitmap());
+        textView.setText(item.getTimestamp()); // Show the timestamp here
+        checkBox.setChecked(item.isSelected());
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> item.setSelected(isChecked));
+
+        return convertView;
     }
+
 }

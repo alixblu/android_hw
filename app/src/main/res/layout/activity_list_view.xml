@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:gravity="center"
-    android:layout_margin="16dp">
+    android:gravity="center_vertical"
+    android:padding="8dp">
 
     <!-- CheckBox -->
     <CheckBox
@@ -14,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp" />
 
-        <!-- ImageView -->
+    <!-- ImageView -->
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="120dp"
@@ -22,11 +21,12 @@
         android:layout_marginEnd="8dp"
         android:scaleType="centerCrop" />
 
+    <!-- TextView for Timestamp -->
     <TextView
         android:id="@+id/textView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:textSize="14sp"
         android:layout_marginEnd="16dp" />
-
-    </LinearLayout>
+</LinearLayout>
