@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "bttuan7"
+rootProject.name = "BTimgGallery"
 include(":app")
  
