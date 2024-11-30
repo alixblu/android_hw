@@ -32,8 +32,8 @@ repositories {
 }
 dependencies {
     // Thêm Glide vào đây
-    implementation ("com.github.bumptech.glide:glide:4.15.0")  // Thêm Glide
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.15.0")  // Đảm bảo sử dụng annotationProcessor
+    implementation ("com.github.bumptech.glide:glide:4.15.1")  // Thêm Glide
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")  // Đảm bảo sử dụng annotationProcessor
 
     implementation("com.github.Baseflow:PhotoView:2.3.0")
     implementation(libs.appcompat)

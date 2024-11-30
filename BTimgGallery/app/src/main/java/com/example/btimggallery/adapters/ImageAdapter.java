@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.example.btimggallery.DetailActivity;
 import com.example.btimggallery.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
@@ -35,8 +36,15 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String imagePath = imagePaths.get(position);
-        Glide.with(context).load(imagePath).into(holder.imageView);
 
+        // Sử dụng Glide để tải ảnh với placeholder và xử lý lỗi
+        Glide.with(context)
+                .load(imagePath)
+                .placeholder(R.drawable.placeholder_image) // Ảnh chờ (thêm file placeholder_image vào res/drawable)
+                .error(R.drawable.error_image)             // Ảnh lỗi (thêm file error_image vào res/drawable)
+                .into(holder.imageView);
+
+        // Thiết lập sự kiện click cho từng item
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, DetailActivity.class);
             intent.putStringArrayListExtra("imagePaths", (ArrayList<String>) imagePaths);
@@ -44,6 +52,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
             context.startActivity(intent);
         });
     }
+
 
     @Override
     public int getItemCount() {

@@ -33,6 +33,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadImages() {
+        // Thêm ảnh từ thư mục drawable
+        imagePaths.add("android.resource://" + getPackageName() + "/" + R.drawable.a);
+        imagePaths.add("android.resource://" + getPackageName() + "/" + R.drawable.b);
+        imagePaths.add("android.resource://" + getPackageName() + "/" + R.drawable.c);
+        imagePaths.add("android.resource://" + getPackageName() + "/" + R.drawable.d);
+        imagePaths.add("android.resource://" + getPackageName() + "/" + R.drawable.e);
+        imagePaths.add("android.resource://" + getPackageName() + "/" + R.drawable.f);
+        // Tiếp tục thêm các ảnh cần thiết...
+
+        // Lấy ảnh từ MediaStore (bộ nhớ ngoài)
         String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -52,4 +62,5 @@ public class MainActivity extends AppCompatActivity {
 
         adapter.notifyDataSetChanged();
     }
+
 }
