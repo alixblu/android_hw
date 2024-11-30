@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BTimgGallery</string>
+    <string name="image_description">Mô tả của bức ảnh</string>
 </resources>
