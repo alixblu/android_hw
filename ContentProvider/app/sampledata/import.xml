@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<points>
+    <entry>
+        <sdt>0123456789</sdt>
+        <point>100</point>
+        <note>First entry</note>
+        <cur_date>2024-10-24</cur_date>
+        <time>10:00 AM</time>
+    </entry>
+    <entry>
+        <sdt>0987654321</sdt>
+        <point>200</point>
+        <note>Second entry</note>
+        <cur_date>2024-10-24</cur_date>
+        <time>10:30 AM</time>
+    </entry>
+    <entry>
+        <sdt>1234567890</sdt>
+        <point>150</point>
+        <note>Third entry</note>
+        <cur_date>2024-10-24</cur_date>
+        <time>11:00 AM</time>
+    </entry>
+</points>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Button to pick a contact -->
+    <Button
+        android:id="@+id/btnViewContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Contact" />
+
+    <!-- Button to call the selected contact -->
+    <Button
+        android:id="@+id/btnCallContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Call Contact" />
+
+    <!-- Button to scan QR code -->
+    <Button
+        android:id="@+id/btnQR"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Scan QR Code" />
+
+    <!-- Camera Preview for QR scanning -->
+    <androidx.camera.view.PreviewView
+        android:id="@+id/preview_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="MissingClass" />
+</LinearLayout>
