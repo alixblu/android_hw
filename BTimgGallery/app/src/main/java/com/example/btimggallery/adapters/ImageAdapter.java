@@ -21,6 +21,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     private Context context;
     private List<String> imagePaths;
 
+    // Constructor để nhận vào context và danh sách đường dẫn ảnh
     public ImageAdapter(Context context, List<String> imagePaths) {
         this.context = context;
         this.imagePaths = imagePaths;
@@ -29,6 +30,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate layout item_image
         View view = LayoutInflater.from(context).inflate(R.layout.item_image, parent, false);
         return new ViewHolder(view);
     }
@@ -37,22 +39,22 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String imagePath = imagePaths.get(position);
 
-        // Sử dụng Glide để tải ảnh với placeholder và xử lý lỗi
+        // Dùng Glide để tải ảnh vào ImageView
         Glide.with(context)
                 .load(imagePath)
-                .placeholder(R.drawable.placeholder_image) // Ảnh chờ (thêm file placeholder_image vào res/drawable)
-                .error(R.drawable.error_image)             // Ảnh lỗi (thêm file error_image vào res/drawable)
-                .into(holder.imageView);
+                .placeholder(R.drawable.placeholder_image)  // Thêm ảnh placeholder
+                .error(R.drawable.error_image)             // Thêm ảnh lỗi
+                .into(holder.imageView);  // Tải ảnh vào ImageView
 
-        // Thiết lập sự kiện click cho từng item
+        // Thêm sự kiện click vào ảnh
         holder.itemView.setOnClickListener(v -> {
+            // Khi click vào ảnh, chuyển sang DetailActivity và truyền dữ liệu ảnh
             Intent intent = new Intent(context, DetailActivity.class);
-            intent.putStringArrayListExtra("imagePaths", (ArrayList<String>) imagePaths);
-            intent.putExtra("position", position);
-            context.startActivity(intent);
+            intent.putStringArrayListExtra("imagePaths", (ArrayList<String>) imagePaths); // Gửi danh sách ảnh
+            intent.putExtra("position", position); // Gửi vị trí ảnh để hiển thị ảnh chi tiết
+            context.startActivity(intent); // Mở DetailActivity
         });
     }
-
 
     @Override
     public int getItemCount() {
@@ -64,6 +66,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            // Tìm ImageView trong mỗi item của RecyclerView
             imageView = itemView.findViewById(R.id.imageView);
         }
     }
