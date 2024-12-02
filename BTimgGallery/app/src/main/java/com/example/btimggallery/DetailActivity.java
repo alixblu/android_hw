@@ -41,6 +41,8 @@ public class DetailActivity extends AppCompatActivity {
             DetailAdapter adapter = new DetailAdapter(this, imagePaths);
             viewPager.setAdapter(adapter);
             viewPager.setCurrentItem(position);
+            //không trượt ảnh khi click từ thư viện
+            viewPager.setCurrentItem(position, false);
 
             // Khởi tạo mảng lưu trữ hệ số phóng to
             scaleFactors = new float[imagePaths.size()];
