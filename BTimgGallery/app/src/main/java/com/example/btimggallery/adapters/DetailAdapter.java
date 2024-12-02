@@ -40,6 +40,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
                 .placeholder(R.drawable.placeholder_image) // Ảnh chờ
                 .error(R.drawable.error_image)             // Ảnh lỗi
                 .into(holder.photoView);
+
+        // Gán tag cho PhotoView để phục vụ việc tìm ảnh trong DetailActivity
+        holder.photoView.setTag("image" + position);
     }
 
     @Override
