@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
         adapter = new ImageAdapter(this, imagePaths);
         recyclerView.setAdapter(adapter);
 
@@ -72,12 +72,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadDefaultImages() {
-        imagePaths.add("android.resource://" + getPackageName() + "/" + R.drawable.a);
-        imagePaths.add("android.resource://" + getPackageName() + "/" + R.drawable.b);
-        imagePaths.add("android.resource://" + getPackageName() + "/" + R.drawable.c);
-        imagePaths.add("android.resource://" + getPackageName() + "/" + R.drawable.d);
-        imagePaths.add("android.resource://" + getPackageName() + "/" + R.drawable.e);
-        imagePaths.add("android.resource://" + getPackageName() + "/" + R.drawable.f);
+        int[] drawableIds = {
+                R.drawable.a, R.drawable.b, R.drawable.c, R.drawable.d,
+                R.drawable.e, R.drawable.f, R.drawable.g, R.drawable.h,
+                R.drawable.i, R.drawable.j, R.drawable.k, R.drawable.l,
+                R.drawable.m, R.drawable.n, R.drawable.o, R.drawable.p,
+                R.drawable.q, R.drawable.r, R.drawable.s, R.drawable.t,
+                R.drawable.u, R.drawable.v, R.drawable.w, R.drawable.x,
+                R.drawable.y, R.drawable.z, R.drawable.aa,R.drawable.bb,
+                R.drawable.cc,R.drawable.dd,R.drawable.ee,R.drawable.ff,
+        };
+
+        for (int drawableId : drawableIds) {
+            imagePaths.add("android.resource://" + getPackageName() + "/" + drawableId);
+        }
+
         // Tiếp tục thêm các ảnh cần thiết...
 
         adapter.notifyDataSetChanged(); // Cập nhật lại adapter
