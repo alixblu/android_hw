@@ -11,10 +11,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class login extends AppCompatActivity {
 
+    private DataBase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // Khởi tạo cơ sở dữ liệu
+        db = new DataBase(this);
 
         EditText inputUsername = findViewById(R.id.inputUsername);
         EditText inputPassword = findViewById(R.id.inputPass);
@@ -24,18 +29,34 @@ public class login extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = inputUsername.getText().toString();
-                String password = inputPassword.getText().toString();
+                String username = inputUsername.getText().toString().trim();
+                String password = inputPassword.getText().toString().trim();
 
-                if (username.equals("admin") && password.equals("admin")) {
-                    // Navigate to MainActivity if credentials are correct
+                // Kiểm tra nếu username hoặc password bị rỗng
+                if (username.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(login.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Kiểm tra thông tin đăng nhập trong cơ sở dữ liệu
+                if (db.validateAccount(username, password)) {
+                    // Điều hướng đến MainActivity nếu thông tin đúng
                     Intent intent = new Intent(login.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                 } else {
-                    // Show error message if credentials are incorrect
-                    Toast.makeText(login.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
+                    // Hiển thị thông báo nếu thông tin sai
+                    Toast.makeText(login.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
                 }
+//                if (username.equals("admin") && password.equals("admin")) {
+//                    // Điều hướng đến MainActivity nếu thông tin đúng
+//                    Intent intent = new Intent(login.this, MainActivity.class);
+//                    startActivity(intent);
+//                    finish();
+//                } else {
+//                    // Hiển thị thông báo nếu thông tin sai
+//                    Toast.makeText(login.this, "Sai tên đăng nhập hoặc mật khẩu", Toast.LENGTH_SHORT).show();
+//                }
             }
         });
 
@@ -47,4 +68,5 @@ public class login extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }}
+    }
+}

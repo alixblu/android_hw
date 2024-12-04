@@ -22,22 +22,32 @@ public class DataBase extends SQLiteOpenHelper {
     private Points Points;
 
 
-
     public DataBase(Context context) {
         super(context, db_name, null, db_version);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        // Tạo bảng SQL
-        String createTable = "CREATE TABLE " + table_input + " (" +
+        // Tạo bảng Points
+        String createPointsTable = "CREATE TABLE " + table_input + " (" +
                 key_phonenumber + " TEXT PRIMARY KEY, " +
                 key_point + " TEXT, " +
                 key_note + " TEXT, " +
-                key_cur_date + " TEXT,"+
+                key_cur_date + " TEXT," +
                 key_time_create + " TEXT)";
-        sqLiteDatabase.execSQL(createTable);
+        sqLiteDatabase.execSQL(createPointsTable);
+
+        // Tạo bảng account
+        String createAccountTable = "CREATE TABLE account (" +
+                "username TEXT PRIMARY KEY, " +
+                "password TEXT)";
+        sqLiteDatabase.execSQL(createAccountTable);
+
+//         Chèn tài khoản mặc định admin/admin
+        String insertDefaultAdmin = "INSERT INTO account (username, password) VALUES ('admin', 'admin')";
+        sqLiteDatabase.execSQL(insertDefaultAdmin);
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
@@ -119,5 +129,59 @@ public class DataBase extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void addAccount(String username, String password) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("username", username);
+        values.put("password", password);
+
+        long result = db.insert("account", null, values);
+        Log.d("DB_INSERT_ACCOUNT", "Insert result: " + result);
+        db.close();
+    }
+
+    public boolean isAccountExists(String username) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query("account",
+                new String[]{"username"},
+                "username=?",
+                new String[]{username},
+                null, null, null);
+
+        boolean exists = (cursor.getCount() > 0);
+        cursor.close();
+        return exists;
+    }
+
+    public boolean validateAccount(String username, String password) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query("account",
+                new String[]{"username"},
+                "username=? AND password=?",
+                new String[]{username, password},
+                null, null, null);
+
+        boolean valid = (cursor.getCount() > 0);
+        cursor.close();
+        return valid;
+    }
+
+    public void deleteAccount(String username) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("account", "username=?", new String[]{username});
+        db.close();
+    }
+
+
+    public boolean updateAccount(String username, String newPassword) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("password", newPassword);
+
+        int result = db.update("account", values, "username=?", new String[]{username});
+        db.close();
+        // Trả về true nếu cập nhật thành công, ngược lại false
+        return result > 0;
+    }
 
 }
