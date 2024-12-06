@@ -1,11 +1,15 @@
 package com.example.btimggallery;
 import android.Manifest;  // Thêm dòng này
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,25 +41,27 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         // Kiểm tra và yêu cầu quyền truy cập bộ nhớ
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    // Hiển thị lý do cho người dùng trước khi yêu cầu quyền lại
-                    Toast.makeText(this, "Ứng dụng cần quyền truy cập bộ nhớ để hiển thị ảnh", Toast.LENGTH_LONG).show();
-                }
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSION);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                intent.setData(Uri.parse("package:" + getPackageName()));
+                startActivity(intent);
             } else {
-                // Nếu quyền đã được cấp, tải ảnh ngay
                 loadImages();
             }
         } else {
-            // Đối với Android 10 (API 29) và trước đó, yêu cầu quyền thông thường
-            loadImages();
+            // Logic như cũ cho các phiên bản Android < 11
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_PERMISSION);
+            } else {
+                loadImages();
+            }
         }
 
     }
-
-    @Override
+        @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_PERMISSION) {
@@ -94,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void loadImages() {
-        // Lấy ảnh từ MediaStore (bộ nhớ ngoài) nếu có quyền truy cập
         String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -104,14 +109,17 @@ public class MainActivity extends AppCompatActivity {
                 MediaStore.Images.Media.DATE_ADDED + " DESC"
         );
 
-        if (cursor != null) {
-            while (cursor.moveToNext()) {
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
                 String path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
                 imagePaths.add(path); // Thêm đường dẫn ảnh vào danh sách
-            }
+            } while (cursor.moveToNext());
             cursor.close();
+        } else {
+            Toast.makeText(this, "Không tìm thấy ảnh nào trong thư viện!", Toast.LENGTH_SHORT).show();
         }
 
-        adapter.notifyDataSetChanged(); // Cập nhật adapter sau khi đã có ảnh
+        adapter.notifyDataSetChanged(); // Cập nhật lại adapter
     }
+
 }
