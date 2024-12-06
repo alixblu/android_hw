@@ -65,7 +65,7 @@ public class CustomAdapter extends BaseAdapter {
             // Create an AlertDialog to confirm deletion
             new AlertDialog.Builder(context)
                     .setTitle("Xác nhận xóa")
-                    .setMessage("Bạn có chắc chắn muốn xóa mục này không?")
+                    .setMessage("Bạn có chắc chắn muốn xóa khách hàng này không?")
                     .setPositiveButton("Có", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
