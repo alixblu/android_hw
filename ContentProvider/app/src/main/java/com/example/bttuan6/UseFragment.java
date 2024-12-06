@@ -28,10 +28,12 @@ public class UseFragment extends Fragment {
     private EditText use_point;
     private EditText note;
     private DataBase db;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_use, container, false);
+
         // Initialize views
         saveInputUse = view.findViewById(R.id.buttonSave);
         saveNextInputUse = view.findViewById(R.id.buttonSaveNext);
@@ -39,7 +41,7 @@ public class UseFragment extends Fragment {
         cur_point = view.findViewById(R.id.editTextCurrentPoints);
         use_point = view.findViewById(R.id.editTextUsedPoints);
         note = view.findViewById(R.id.editTextNote);
-        db = new DataBase(getActivity()); // Correct context initialization
+        db = new DataBase(getActivity());
 
         phonenumber.addTextChangedListener(new TextWatcher() {
             @Override
@@ -60,23 +62,28 @@ public class UseFragment extends Fragment {
             public void afterTextChanged(Editable s) {}
         });
 
-        // Set onClickListeners for buttons
         saveInputUse.setOnClickListener(v -> {
-            Check(phonenumber.getText().toString(), use_point.getText().toString());
+            String phone = phonenumber.getText().toString();
+            if (!db.isPhoneNumberExists(phone)) {
+                showToastAtTop("Số điện thoại không tồn tại. Vui lòng nhập lại.");
+//                phonenumber.setText(""); // Clear phone number input
+                return;
+            }
+
+            Check(phone, use_point.getText().toString());
             try {
                 int curPoint = Integer.parseInt(cur_point.getText().toString());
                 int usePoint = Integer.parseInt(use_point.getText().toString());
-                if(curPoint<usePoint){
-                    showToast("Điểm sử dụng phải nhỏ hơn điểm hiện tại");
+                if (curPoint < usePoint) {
+                    showToast("Điểm sử dụng phải nhỏ hơn hoặc bằng điểm hiện tại.");
+                    return;
                 }
                 String point_save = String.valueOf(curPoint - usePoint);
                 String date = new SimpleDateFormat("yyyy-MM-dd-HH-mm", Locale.getDefault()).format(new Date());
-                String phone = phonenumber.getText().toString();
-                if (db.isPhoneNumberExists(phone)) {
-                    Points updatedPoint = new Points(phone, point_save, note.getText().toString(), date);
-                    db.updatePoint(updatedPoint);
-                    showToast("Sử dụng điểm thành công thành công");
-                }
+
+                Points updatedPoint = new Points(phone, point_save, note.getText().toString(), date);
+                db.updatePoint(updatedPoint);
+                showToast("Sử dụng điểm thành công");
                 clearInputs();
                 showDataFromDb();
             } catch (NumberFormatException e) {
@@ -85,11 +92,10 @@ public class UseFragment extends Fragment {
         });
 
         saveNextInputUse.setOnClickListener(v -> {
-            // Handle save and next button click
             showToast("Save and Next clicked");
         });
 
-        return view; // Return the inflated view
+        return view;
     }
 
     private void Check(String phone, String new_point) {
@@ -115,24 +121,26 @@ public class UseFragment extends Fragment {
 
     private void clearInputs() {
         phonenumber.setText("");
-        cur_point.setText("");
+        cur_point.setText("0");
         use_point.setText("");
         note.setText("");
     }
 
     private void showDataFromDb() {
         Cursor cursor = db.getAllPoints();
-        if (cursor.moveToFirst()) {
-            do {
-                String sdt = cursor.getString(cursor.getColumnIndexOrThrow("sdt"));
-                String point = cursor.getString(cursor.getColumnIndexOrThrow("point"));
-                String note = cursor.getString(cursor.getColumnIndexOrThrow("note"));
-                String cur_date = cursor.getString(cursor.getColumnIndexOrThrow("cur_date"));
-                // Log the data
-                Log.d("DB_DATA", "Phone: " + sdt + ", Points: " + point + ", Note: " + note + ", Date: " + cur_date);
-            } while (cursor.moveToNext());
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    String sdt = cursor.getString(cursor.getColumnIndexOrThrow("sdt"));
+                    String point = cursor.getString(cursor.getColumnIndexOrThrow("point"));
+                    String note = cursor.getString(cursor.getColumnIndexOrThrow("note"));
+                    String cur_date = cursor.getString(cursor.getColumnIndexOrThrow("cur_date"));
+                    Log.d("DB_DATA", "Phone: " + sdt + ", Points: " + point + ", Note: " + note + ", Date: " + cur_date);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            cursor.close();
         }
-        cursor.close();
     }
 
     private void fillCurrentPointsAndNotes(String phone) {
@@ -141,9 +149,10 @@ public class UseFragment extends Fragment {
             cur_point.setText(point.getPoint());
             note.setText(point.getNote());
         } else {
-            note.setText("");
             cur_point.setText("0");
+            note.setText("");
+            showToastAtTop("Số điện thoại không tồn tại. Vui lòng kiểm tra lại.");
+//            phonenumber.setText(""); // Clear input field
         }
     }
-
 }
