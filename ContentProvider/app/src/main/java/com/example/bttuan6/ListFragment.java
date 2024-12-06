@@ -70,8 +70,6 @@ public class ListFragment extends Fragment {
                 }
                 return true;
             });
-
-
             popupMenu.show();
         });
 
@@ -91,6 +89,7 @@ public class ListFragment extends Fragment {
         Cursor cursor = db.getAllPoints();
         if (cursor.moveToFirst()) {
             do {
+
                 String phoneNumber = cursor.getString(cursor.getColumnIndexOrThrow("sdt"));
                 String point = cursor.getString(cursor.getColumnIndexOrThrow("point"));
                 String note = cursor.getString(cursor.getColumnIndexOrThrow("note"));
@@ -114,18 +113,19 @@ public class ListFragment extends Fragment {
         // Tạo nội dung XML
         StringBuilder xmlContent = new StringBuilder();
         xmlContent.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-        xmlContent.append("<PointsList>\n");
+        xmlContent.append("<points>\n");
 
         for (Points point : pointsArrayList) {
-            xmlContent.append("  <Point>\n");
-            xmlContent.append("    <PhoneNumber>").append(point.getSdt()).append("</PhoneNumber>\n");
-            xmlContent.append("    <PointValue>").append(point.getPoint()).append("</PointValue>\n");
-            xmlContent.append("    <Note>").append(point.getNote()).append("</Note>\n");
-            xmlContent.append("    <CurDate>").append(point.getCur_date()).append("</CurDate>\n");
-            xmlContent.append("  </Point>\n");
+            xmlContent.append("  <entry>\n");
+            xmlContent.append("    <phone>").append(point.getSdt()).append("</phone>\n");
+            xmlContent.append("    <point>").append(point.getPoint()).append("</point>\n");
+            xmlContent.append("    <note>").append(point.getNote()).append("</note>\n");
+            xmlContent.append("    <cur_date>").append(point.getCur_date()).append("</cur_date>\n");
+            xmlContent.append("    <time>").append(point.getTime_create()).append("</time>\n");
+            xmlContent.append("  </entry>\n");
         }
 
-        xmlContent.append("</PointsList>");
+        xmlContent.append("</points>");
 
         File exportDir = new File(getContext().getExternalFilesDir(null), "EXPORT");
         if (!exportDir.exists() && !exportDir.mkdirs()) {
@@ -133,7 +133,7 @@ public class ListFragment extends Fragment {
             return;
         }
 
-        File file = new File(exportDir, "pointkhachhang.xml");
+        File file = new File(exportDir, "export_khachhang.xml");
         try (FileOutputStream fileOutputStream = new FileOutputStream(file);
              OutputStreamWriter writer = new OutputStreamWriter(fileOutputStream)) {
             writer.write(xmlContent.toString());
@@ -146,7 +146,7 @@ public class ListFragment extends Fragment {
     }
 
     private void sendEmailWithXml() {
-        File file = new File(getContext().getExternalFilesDir(null) + "/EXPORT/pointkhachhang.xml");
+        File file = new File(getContext().getExternalFilesDir(null) + "/EXPORT/export_khachhang.xml");
 
         if (!file.exists() || !file.canRead()) {
             Toast.makeText(getContext(), "File không tồn tại hoặc không thể đọc", Toast.LENGTH_SHORT).show();
@@ -227,7 +227,7 @@ public class ListFragment extends Fragment {
                             point = new Points();
                         } else if (point != null) {
                             switch (tagName) {
-                                case "sdt":
+                                case "phone":
                                     point.setSdt(parser.nextText());
                                     break;
                                 case "point":

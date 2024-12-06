@@ -7,10 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.bttuan6.InputFragment;
-import com.example.bttuan6.ListFragment;
-import com.example.bttuan6.UseFragment;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
