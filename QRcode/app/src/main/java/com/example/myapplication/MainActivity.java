@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import static java.lang.Thread.sleep;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -60,16 +62,17 @@ public class MainActivity extends AppCompatActivity {
         Button btnCallContact = findViewById(R.id.btnCallContact);
         Button btnQR = findViewById(R.id.btnQR);
 
-        // Handle QR Scan Button
         btnQR.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA)
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(MainActivity.this,
                         new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
             } else {
+                previewView.setVisibility(View.VISIBLE);  // Show the camera preview
                 startCamera();
             }
         });
+
 
         // Handle "View Contact" button click
         btnSelectContact.setOnClickListener(v -> {
@@ -194,6 +197,11 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Unsupported QR code format", Toast.LENGTH_SHORT).show();
                 break;
         }
+        try {
+            sleep(3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -210,12 +218,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Send SMS using Intent
     private void sendSMS(String phoneNumber, String message) {
         if (phoneNumber != null && message != null) {
             Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
-            smsIntent.setData(Uri.parse("smsto:" + phoneNumber)); // Only SMS apps should handle this
+            smsIntent.setData(Uri.parse("smsto:" + phoneNumber)); // Use "smsto:" instead of "sms:"
             smsIntent.putExtra("sms_body", message);
+
+            // Check if there is an app to handle the SMS intent
             if (smsIntent.resolveActivity(getPackageManager()) != null) {
                 startActivity(smsIntent);
             } else {
@@ -225,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Invalid QR code for SMS", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void openContactPicker() {
         Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
