@@ -101,6 +101,30 @@ public class DetailActivity extends AppCompatActivity {
                     return super.onSingleTapUp(e);
                 }
             });
+            viewPager.setPageTransformer(new ViewPager2.PageTransformer() {
+                @Override
+                public void transformPage(@NonNull View page, float position) {
+                    if (position < -1) {
+                        // Trang nằm ngoài bên trái
+                        page.setScaleX(0.8f);
+                        page.setScaleY(0.8f);
+                        page.setAlpha(0.5f);
+                    } else if (position <= 1) {
+                        // Trang nằm trong màn hình (giữa -1 và 1)
+                        float scaleFactor = Math.max(0.8f, 1 - Math.abs(position));
+                        page.setScaleX(scaleFactor);
+                        page.setScaleY(scaleFactor);
+
+                        // Đặt độ mờ dần
+                        page.setAlpha(0.5f + (scaleFactor - 0.8f) / 0.2f * (1 - 0.5f));
+                    } else {
+                        // Trang nằm ngoài bên phải
+                        page.setScaleX(0.8f);
+                        page.setScaleY(0.8f);
+                        page.setAlpha(0.5f);
+                    }
+                }
+            });
 
             // Lắng nghe sự kiện chạm
             viewPager.setOnTouchListener((v, event) -> {
