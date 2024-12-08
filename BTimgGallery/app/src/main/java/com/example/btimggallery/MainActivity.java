@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged(); // Cập nhật lại adapter
     }
 
-
+//hiện thư viện
     private void loadImages() {
         String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(

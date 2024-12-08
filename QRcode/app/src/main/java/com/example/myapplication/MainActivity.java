@@ -172,10 +172,20 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(browserIntent);
                 break;
             case Barcode.TYPE_EMAIL:
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + barcode.getEmail().getAddress()));
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "QR Code Email");
-                startActivity(emailIntent);
+                // Extract email details
+                String email = barcode.getEmail().getAddress();
+                String subject = barcode.getEmail().getSubject();
+                String body = barcode.getEmail().getBody();
+
+                // Intent to open email app
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + email));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject != null ? subject : "QR Code Email");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, body != null ? body : "");
+
+                    startActivity(emailIntent);
+
                 break;
+
             case Barcode.TYPE_PHONE:
                 // Use ACTION_VIEW to open SMS app to send a message
                 Intent smsIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:" + barcode.getPhone().getNumber()));
